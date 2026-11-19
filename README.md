@@ -1,17 +1,30 @@
-# JE Roadmap + Google login + notes upload
+# 🎯 JE Electronics Roadmap
 
-## 1. Supabase (free)
-1. supabase.com pe project banao. Project Settings > API se **Project URL** aur **anon public key** copy karo.
-2. SQL Editor me `supabase.sql` paste karo. Pehle `OWNER@gmail.com` ko apne Google email se replace karo. Run karo.
+Junior Engineer (Electronics) exam ke liye ek modern, student-friendly study website. Hinglish me, bina kisi framework ke (plain HTML/CSS/JS).
 
-## 2. Google login
-1. console.cloud.google.com > APIs & Services > Credentials > Create OAuth client ID (Web application).
-2. Authorized redirect URI: `https://<project-ref>.supabase.co/auth/v1/callback`
-3. Client ID aur Secret ko Supabase > Authentication > Providers > Google me paste karo, enable karo.
-4. Supabase > Authentication > URL Configuration: Site URL = apni GitHub Pages link (`https://username.github.io/repo/`), aur wahi Redirect URLs me bhi add karo.
+## ✨ Features
+- **Overview:** pichle 5 papers ke hisaab se subject-wise weightage aur "pehle yeh 15" topics
+- **Syllabus tracker:** har subtopic bullets/numbering me, progress tick (Padh liya → PYQ kiye → Pakka), tier filter
+- **Notes:** subject-wise PDF notes, dekho ya download karo
+- **Numericals + Formula sheet:** exam se pehle quick revision
+- **Planner:** exam date daalo, subject ka time weightage ke hisaab se baant diya jata hai
+- **Journey + Mock log:** mock scores ka graph aur negative marking ka hisaab
+- **PDF download:** poora roadmap ya sirf formula sheet (📥 PDF button)
+- **Google login:** login karne par progress, mock scores aur planner account me sync hote hain (phone aur laptop pe same)
+- Dark / light theme
 
-## 3. index.html me 1 line badlo
-`const SB_URL="",SB_KEY="",OWNER="";` me URL, anon key, aur apna Google email bharo.
+## 🔐 Login aur Notes
+- Koi bhi Google se login karke apna progress sync kar sakta hai. Har user ka data sirf usi ko dikhta hai.
+- Notes ki PDFs sabko dikhti hain, par **upload sirf owner kar sakta hai** (website se, subject kholke).
 
-## 4. GitHub Pages pe upload
-index.html, .nojekyll repo me daalo. Phir site pe apne email se login karo: Notes tab me har subject me Upload dikhega. Dusre log login karke sirf progress/mocks sync kar sakte hain, upload nahi.
+## 🗂️ Repo me kya hai
+| File | Kaam |
+|---|---|
+| `index.html` | poori website (code + syllabus data) |
+| `.nojekyll` | GitHub Pages ke liye |
+| `README.md` | ye file |
+
+## ⚙️ Backend
+Login, sync aur PDF storage [Supabase](https://supabase.com) (free plan) se chalta hai. `index.html` me sirf Supabase ka public URL aur publishable key hai, koi secret key nahi. Data ki suraksha database ke Row Level Security rules se hoti hai.
+
+> Free plan me hafte bhar koi site na khole to Supabase project pause ho jata hai. Dashboard se ek click me wapas chalu hota hai.
