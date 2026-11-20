@@ -1,4 +1,4 @@
-# 🎯 JE Electronics Roadmap
+# 🎯 RRB-JE-CBT2
 
 Junior Engineer (Electronics) exam ki taiyari ke liye ek modern study website. Pichle 5 papers ke analysis ke hisaab se syllabus topic-wise, weightage ke saath, Hinglish me.
 
