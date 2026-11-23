@@ -1,17 +1,18 @@
 # 🎯 RRB-JE-CBT2
 
-Junior Engineer (Electronics) exam ki taiyari ke liye ek modern study website. Pichle 5 papers ke analysis ke hisaab se syllabus topic-wise, weightage ke saath, Hinglish me.
+A free, modern study website for the RRB JE CBT 2 (Electronics) exam. It breaks down the last 5 papers topic by topic, with weightage, syllabus, PYQs, formulas and notes.
 
 ## ✨ Features
-- Subject-wise weightage aur sabse zyada puchhe jaane wale topics
-- Syllabus tracker: har subtopic bullets/numbering me, progress mark karne ka option
-- PYQs: 5 papers ke technical sawal topic-wise, practice mode ke saath
-- Subject-wise PDF notes (dekhne aur download karne ke liye login)
-- Numericals aur formula sheet
-- Study planner aur mock test score log
+- Overview with weightage by subject and the top 15 topics
+- Syllabus tracker: subject tiles, tiers, topic-wise study points and a Complete button
+- PYQs: technical questions from 5 papers, by subject or by paper (Q1 to Q100), with practice mode
+- Study order: the best order to study all topics
+- Numericals and formula sheet
+- Subject-wise PDF notes (log in to view and download)
+- Mock test tracker with score graph
 - PDF download
-- Google login se progress sync
-- Dark / light theme
+- Google login to sync progress and scores
+- Dark and light theme
 
 ## 👨‍💻 Developer
-**Rakesh Kumar Dudhawal**
+**Rakesh Kumar Dudhawal** ([@akafoxfire](https://github.com/akafoxfire))
