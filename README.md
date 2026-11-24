@@ -13,6 +13,7 @@ A free, modern study website for the RRB JE CBT 2 (Electronics) exam. It breaks 
 - Mock test tracker with charts, accuracy, speed and subject-wise analysis
 - PDF download
 - Google login to sync progress and scores
+- Nira, an engineer cat who walks around the home page (can be switched off with the 🐱 button)
 - Dark and light theme
 
 ## 👨‍💻 Developer
