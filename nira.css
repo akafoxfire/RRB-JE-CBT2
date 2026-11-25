@@ -22,3 +22,15 @@
 .nip{width:190px;height:145px}.nic h3{font-size:22px}
 @media(max-width:600px){.nc{width:124px;height:95px}.nic{grid-template-columns:1fr}.nip{margin:0 auto}}
 @media(prefers-reduced-motion:reduce){.nc.sleep .zz,.nt,.sunfx{animation:none}.nt,.sunfx{display:none}}
+.nc canvas{transform-origin:22.4% 94%;transition:transform .25s}
+.nc.mini canvas{transform:scale(.74)}.nc.mini .nhit{left:22%;right:34%;top:48%}
+.nb{max-width:230px;font-weight:600}
+.nira-w{display:inline-block;white-space:nowrap}.nira-ch{display:inline-block;animation-delay:calc(var(--i)*28ms);animation-fill-mode:both}
+.s-wave .nira-ch{animation:nwave .9s ease-in-out 3;animation-delay:calc(var(--i)*40ms)}@keyframes nwave{50%{transform:translateY(-4px)}}
+.s-pop .nira-ch{animation-name:npop;animation-duration:.35s}@keyframes npop{from{opacity:0;transform:scale(2.2)}}
+.s-rain .nira-ch{color:hsl(var(--h) 75% 48%);animation-name:ndrop;animation-duration:.4s}@keyframes ndrop{from{opacity:0;transform:translateY(-10px)}}
+[data-theme=dark] .s-rain .nira-ch{color:hsl(var(--h) 85% 72%)}
+.s-jelly .nira-ch{animation-name:njelly;animation-duration:.6s}@keyframes njelly{0%{opacity:0;transform:scale(.3)}60%{transform:scale(1.35,.8)}80%{transform:scale(.9,1.15)}}
+.ntoy{position:absolute;left:0;top:0;pointer-events:auto;background:none;border:0;padding:0;font-size:24px;line-height:1;cursor:pointer}
+.npaw{position:absolute;font-size:11px;opacity:0;transform:rotate(var(--r));animation:npaw 2.5s forwards}@keyframes npaw{8%{opacity:.45}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.nira-ch{animation:none!important}.nc canvas{transition:none}}
