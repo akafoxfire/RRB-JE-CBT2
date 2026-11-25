@@ -6,40 +6,35 @@
 const NIRA_SOUNDS={meow:"meow.mp3",purr:"purr.mp3",la:"lala.mp3",hehe:"hehe.mp3"};
 const NIRA_VOL={meow:.8,purr:.7,la:.45,hehe:.6};
 
-/* {n} ki jagah login wale ka naam (login na ho to "user") */
+/* {n} ki jagah login wale ka naam (login na ho to "user"). Baatein English mein, sirf jaate waqt ka dialogue Hindi mein. */
 const NF=[
-"Psst {n}... maine diode se pucha ulta kyun nahi chalta. Bola: mera bias hai 😼",
-"{n}, tum padho. Main yahan professionally cute lagti hoon ✨",
-"Aaj ka plan: tum 2 topic, main 14 jhapki. Deal? 😴",
-"{n}, phone side mein! Maine dekh liya 👀",
-"Op-amp ka input impedance infinite... meri bhookh bhi 🐟",
-"Meri helmet dekhi? Safety first, snacks second, {n} 😎",
-"{n} ek sawaal solve karo, main ek backflip dungi. Sauda pakka? 🤸",
-"Capacitor charge hota hai, {n} bhi. 5 minute stretch karo ⚡",
-"Resistance mat karo {n}... revision ho jaane do 😹",
-"Maine poora syllabus soongh liya. Control systems thoda teekha hai 🌶️",
-"JE {n}... sunne mein kitna accha lagta hai na? 🚆",
-"Galti hui? Koi na, main bhi table se cheezein girati hoon 🙃",
-"{n}, paani piya? Meri moonchh kehti hai nahi 💧",
-"NAND se sab ban jaata hai. Mujhse sirf pyaar banta hai 💛",
-"Wrong answer pe 1/3 kat-ta hai. Tukka soch ke maro {n}!",
-"Ohm shanti ohm... V = IR ♾️"];
+"{n}, you study. I'll handle being cute ✨",
+"Today's plan: you finish 2 topics, I finish 2 naps 😴",
+"Tiny reminder, {n}: drink some water 💧",
+"I sniffed the whole syllabus. Control systems smells spicy 🌶️",
+"Junior Engineer {n}... sounds lovely, right? 🚆",
+"Wrong answers cost 1/3 mark. Guess wisely, {n}!",
+"Safety first, snacks second 😎",
+"Everyone gets one wrong. I knock things off tables daily 🙃",
+"V = IR. Ohm shanti ✨",
+"One more topic, {n}. I believe in you 💛"];
+/* Bollywood andaaz: Nira jab aaram karne jaati hai */
+const NBYE=["लो, मैं चली... याद आए तो पुकार लेना! 💛","अलविदा मत कहना... बस कोने तक जा रही हूँ 🌹","जा रही हूँ... पर दिल यहीं छोड़े जा रही हूँ ❤️","लो मैं चली, अपनी सारी अदाएँ साथ लेकर 💃","रूठी नहीं हूँ... बस ज़रा आराम फ़रमाने चली 😌"];
 const NLINE={
- poke:["Meow! Haan {n}, bolo? 🐾","Arre {n}! Gudgudi hoti hai 😹","Itna pyaar? Ek fish bhi dedo 🐟","Meri naak boop kar di! Ab tum mere ho 😼","{n}, click nahi, concept clear karo 😌"],
- drag:["Wheee {n}! Main udd rahi hoon 🙀","Arre helmet sambhalo! ⛑️","Lift free hai kya? 😹"],
- flip:["Dekha {n}? 10 out of 10! 🤸","Ulti duniya zyada acchi lagti hai 🙃","Gravity? Main nahi maanti 😎"],
- belly:["Pet dikha rahi hoon... jaal hai {n} 😼","Ulta hoke socho to numericals aasan 🙃","Thodi si masti, phir padhai ✨"],
- toy:["Wo meri hai! 👀","Shikaar mode ON 🐾","Hilna mat {n}... 🤫"],
- pet:["Purrrr... bas yahi karte raho {n} 😻","Aaaah, kaan ke peeche... perfect 💛"],
- name:["Yahan sukoon hai 💛","Rakesh ke bagal wali seat meri 😸","Psst {n}, inhone mujhe banaya hai 🐾","Chupchaap poonchh hila rahi hoon ♥"],
- login:["{n}, naam batao na! Google se login karo, phir naam se bulaungi 🥺","Login kar lo {n}, progress kho gayi to main ro dungi 😿","Abhi tum sirf 'user' ho... mujhe asli naam chahiye 👉👈"]};
+ poke:["Meow! Yes, {n}? 🐾","Hey, that tickles! 😹","So much love? A fish would be nice too 🐟","You booped me. You're mine now 😼"],
+ drag:["Wheee! Gently, please 🙀","Careful with my helmet! ⛑️"],
+ flip:["Did you see that, {n}? 10 out of 10! 🤸"],
+ belly:["Belly rubs? It might be a trap 😼"],
+ toy:["Ooh, mine! 👀"],
+ pet:["Purrrr... right there, {n} 😻","Mmm, behind the ears... perfect 💛"],
+ login:["I'd love to call you by name. Sign in with Google? 🥺","Sign in, {n}, so your progress stays safe 💛"]};
 function nName(){const u=typeof user!="undefined"&&user;if(!u)return"user";const m=u.user_metadata||{};return String(m.full_name||m.name||(u.email||"user").split("@")[0]).trim().split(/\s+/)[0]}
 const nLine=k=>pick(NLINE[k]);
 function nTimeLine(){const h=new Date().getHours(),d=state.exam?Math.ceil((new Date(state.exam)-Date.now())/864e5):0;
-  if(d>0&&Math.random()<.5)return"{n}, exam mein "+d+" din! Main hoon na, chalo ek topic 💪";
-  return h<5?"{n}, itni raat? Ullu main hoon ya tum? 🦉":h<12?"Good morning {n}! Taaza dimaag, mushkil topic pehle ☀️":h<17?"Dopahar ki neend aa rahi hai? Mujhe bhi {n} 😪":h<21?"Shaam ho gayi {n}, revision time 🌇":"Raat ko ek PYQ set, phir so jaana {n} 🌙"}
+  if(d>0&&Math.random()<.5)return"{n}, "+d+" days to the exam. One topic at a time 💪";
+  return h<5?"Up this late, {n}? That's my job 🦉":h<12?"Good morning, {n}! Hardest topic first ☀️":h<17?"Afternoon sleepiness? Same, {n} 😪":h<21?"Evening, {n}. Revision time 🌇":"One last PYQ set, then sleep, {n} 🌙"}
 
-const NQ=[["AND gate: 1 aur 0 ka output?",["0","1","Undefined"],0],["Unit of capacitance?",["Henry","Farad","Ohm"],1],["A diode conducts in which bias?",["Forward","Reverse","Both"],0],["Decimal 5 in binary?",["101","110","011"],0],["Ideal op-amp input impedance?",["Zero","Infinite","50 ohm"],1],["8085 is a ___ bit microprocessor.",["4","8","16"],1],["Which gate is universal?",["XOR","NAND","AND"],1],["AC frequency in India?",["50 Hz","60 Hz","100 Hz"],0],["Diodes in a bridge rectifier?",["2","4","6"],1],["PN junctions in an SCR?",["2","3","4"],1],["Unit of inductance?",["Henry","Farad","Tesla"],0],["Power = ?",["V x I","V / I","I / V"],0],["Kirchhoff's current law is based on conservation of?",["Energy","Charge","Momentum"],1],["An ADC converts?",["Digital to analog","Analog to digital","AC to DC"],1],["In series resonance, XL equals?",["XC","R","0"],0]];
+const NQ=[["AND gate: output for inputs 1 and 0?",["0","1","Undefined"],0],["Unit of capacitance?",["Henry","Farad","Ohm"],1],["A diode conducts in which bias?",["Forward","Reverse","Both"],0],["Decimal 5 in binary?",["101","110","011"],0],["Ideal op-amp input impedance?",["Zero","Infinite","50 ohm"],1],["8085 is a ___ bit microprocessor.",["4","8","16"],1],["Which gate is universal?",["XOR","NAND","AND"],1],["AC frequency in India?",["50 Hz","60 Hz","100 Hz"],0],["Diodes in a bridge rectifier?",["2","4","6"],1],["PN junctions in an SCR?",["2","3","4"],1],["Unit of inductance?",["Henry","Farad","Tesla"],0],["Power = ?",["V x I","V / I","I / V"],0],["Kirchhoff's current law is based on conservation of?",["Energy","Charge","Momentum"],1],["An ADC converts?",["Digital to analog","Analog to digital","AC to DC"],1],["In series resonance, XL equals?",["XC","R","0"],0]];
 
 const rnd=(a,b)=>a+Math.random()*(b-a),pick=a=>a[Math.floor(Math.random()*a.length)];
 const calmMotion=window.matchMedia?matchMedia("(prefers-reduced-motion: reduce)"):{matches:false};
@@ -241,14 +236,17 @@ function drawCat(cv,mode,age,phase,dir,vy,look){
 function niraPos(b){b.className="nb"+(nira.x<140?" bl":nira.x>innerWidth-260?" br":"")+(nira.y<90?" bd":"")}
 /* har baar alag andaaz: lehar, pop, rang-birange, jhatka */
 function nFancy(b,text){
-  const style=pick(["wave","pop","rain","jelly"]);b.textContent="";b.classList.add("s-"+style);let i=0;
-  const seg=window.Intl&&Intl.Segmenter?w=>[...new Intl.Segmenter().segment(w)].map(x=>x.segment):w=>Array.from(w);
+  const hindi=/[\u0900-\u097F]/.test(text),style=hindi?"pop":pick(["wave","pop","rain","jelly"]);b.textContent="";b.classList.add("s-"+style);let i=0;
   text.split(" ").forEach((word,n)=>{if(n)b.append(" ");const w=document.createElement("span");w.className="nira-w";
-    seg(word).forEach(ch=>{const c=document.createElement("span");c.className="nira-ch";c.textContent=ch;c.style.setProperty("--i",i);c.style.setProperty("--h",(i*23+260)%360);i++;w.append(c)});b.append(w)})}
-function niraSay(s,ms){const b=$("#nbub");if(!b||nira.qOpen)return;s=String(s).replace(/\{n\}/g,nName());niraPos(b);nFancy(b,s);b.setAttribute("aria-label",s);b.classList.add("on");clearTimeout(nira.bt);nira.bt=setTimeout(()=>b.classList.remove("on","qzb"),ms||Math.max(3400,s.length*75))}
+    /* Hindi ke akshar jude rehte hain, isliye poora shabd ek saath */
+    (hindi?[word]:Array.from(word)).forEach(ch=>{const c=document.createElement("span");c.className="nira-ch";c.textContent=ch;c.style.setProperty("--i",hindi?i*5:i);c.style.setProperty("--h",(i*(hindi?60:23)+260)%360);i++;w.append(c)});b.append(w)})}
+/* force sirf zaroori baat ke liye. Lautata hai: dikhaya ya nahi */
+function niraSay(s,ms,force){const b=$("#nbub");if(!b||nira.qOpen||nira.gone||(!force&&Date.now()<nira.sayUntil))return false;
+  s=String(s).replace(/\{n\}/g,nName());niraPos(b);nFancy(b,s);b.setAttribute("aria-label",s);b.classList.add("on");
+  const time=Math.max(ms||0,3000+s.length*90);nira.sayUntil=Date.now()+time;clearTimeout(nira.bt);nira.bt=setTimeout(()=>b.classList.remove("on","qzb"),time);return true}
 function niraAskLogin(force){
   const can=force||(typeof sb!="undefined"&&sb&&!user);const b=$("#nbub");if(!can||!b||nira.qOpen)return false;
-  niraSay(nLine("login"),9000);const q=document.createElement("div");q.className="qz";q.innerHTML='<button data-nl="1">🔐 Google se login</button>';b.append(q);b.classList.add("qzb");return true}
+  if(!niraSay(nLine("login"),11000,force))return false;const q=document.createElement("div");q.className="qz";q.innerHTML='<button data-nl="1">🔐 Sign in with Google</button>';b.append(q);b.classList.add("qzb");return true}
 addEventListener("click",e=>{if(e.target.dataset&&e.target.dataset.nl){e.stopPropagation();$("#nbub").classList.remove("on","qzb");const l=$("#login");if(l)l.click()}},true);
 function niraNotes(ch){const c=$("#ncat");if(!c)return;(ch||["♪","♫","♪"]).forEach((x,i)=>{const n=document.createElement("span");n.className="nt";n.textContent=x;n.style.cssText="--dx:"+(i*26-26)+"px;left:"+(30+i*24)+"%;animation-delay:"+i*.2+"s"+(x=="♥"?";color:#ff5ca8":"");c.append(n);setTimeout(()=>n.remove(),2400)})}
 function niraMode(m,t){const mode={walk:"w",chase:"chase"}[m]||m;if(nira.mode!=mode)nira.age=0;nira.mode=mode;nira.t=t;const c=$("#ncat");if(c)c.className="nc "+mode}
@@ -256,9 +254,11 @@ function niraSing(s,ms){niraSay(s||"♪ la... la la ♪",ms||3800);sfx("la");nir
 /* Mock / sahi jawab = naach, topic complete = khushi mein ghoomna */
 function niraCheer(s){if(!$("#ncat")||state.catOff)return;if(!s||/Mock|Correct|meet/.test(s))niraMode("dance",2.6);else niraMode("spin",.8);niraSing(s)}
 function niraReact(ok){if(!$("#ncat")||state.catOff)return;if(!$("#v-home").classList.contains("on")&&Math.random()<.5)return;if(ok)niraCheer("Correct! la la la ♪");else{niraMode("shake",1.4);niraSay(pick(["Oops! Try the next one.","Mistakes teach more than marks.","Shake it off. You've got this!"]),2200);sfx("no")}}
+function niraHearts(){if(calmMotion.matches)return;for(let i=0;i<16;i++){const h=document.createElement("span");h.className="nheart";h.textContent="❤️";
+  h.style.cssText=`left:${rnd(4,94)}vw;font-size:${rnd(13,24)}px;animation-delay:${rnd(0,1.4)}s;--dx:${rnd(-40,40)}px`;document.body.append(h);setTimeout(()=>h.remove(),5600)}}
 function niraPoke(){
   const now=Date.now();nira.n++;nira.clicks=nira.clicks.filter(t=>now-t<2500).concat(now);
-  if(nira.n%7==0){niraMode("dance",3);niraSay("Sunshine mode ON ☀️ ♪ la... la la ♪",4200);sfx("la");niraNotes();const s=document.createElement("div");s.className="sunfx";s.textContent="☀️";document.body.append(s);setTimeout(()=>s.remove(),3700)}
+  if(nira.n%7==0){niraMode("dance",3);niraSay("Sunshine mode ON ☀️ ♪ la... la la ♪",4200,true);sfx("la");niraNotes();niraHearts()}
   else if(nira.clicks.length>=3){niraMode("sit",2.4);niraSay(nLine("pet"),2600);sfx("purr");niraNotes(["♥","♥","♥"])}
   else{sfx("meow");niraSay(Math.random()<.6?nLine("poke"):pick(NF));niraMode("sit",1.4)}}
 function niraPlats(){const vh=innerHeight,vw=innerWidth;nira.pl=[...document.querySelectorAll(".card,.ntile,.sc,.nrow,.cro,.meter,.dev,.mfoot,nav a,.btn,.ring")].filter(e=>{const r=e.getBoundingClientRect();return r.width>56&&r.top>90&&r.top<vh-40&&r.left<vw&&r.right>0&&e.offsetParent!==null&&!e.closest(".ni")})}
@@ -268,28 +268,25 @@ function niraJump(el){
   if(!cand.length)return false;
   const [e,r]=pick(cand),h=fy-r.top,A=Math.max(h,0)+70,vy=-Math.sqrt(2*G*A),T=Math.sqrt(2*A/G)+Math.sqrt(2*(A-h)/G);
   const aim=el?(r.left+r.right)/2-W/2:fx-W/2+rnd(-35,35),px=Math.min(r.right-W*.7,Math.max(r.left-W*.3,aim));
-  nira.vx=(px-nira.x)/T;nira.vy=vy;nira.dir=nira.vx>=0?1:-1;nira.plat=null;nira.bounced=1;niraMode("air",0);sfx("pop");return true}
-function niraFlip(){nira.plat=null;nira.vy=-640;nira.vx=nira.dir*60;nira.bounced=1;nira.age=0;niraMode("flip",0);sfx("pop");if(Math.random()<.5)niraSay(nLine("flip"),2400)}
+  nira.vx=(px-nira.x)/T;nira.vy=vy;nira.dir=nira.vx>=0?1:-1;nira.plat=null;nira.bounced=1;niraMode("air",0);return true}
+function niraFlip(){nira.plat=null;nira.vy=-600;nira.vx=nira.dir*50;nira.bounced=1;nira.age=0;niraMode("flip",0)}
 function niraPick(){
-  const calm=!$("#v-home").classList.contains("on");
-  /* [kaam, vazan, kam se kam sec, zyada se zyada] ; padhai wale page par thoda shaant */
-  const table=calm?[["walk",24,3,6],["jump",14],["flip",8],["roll",8,1.6,1.6],["belly",10,2,3.5],["wash",12,2,3],["sit",14,1.5,3],["stretch",6,1.4,1.4],["sleep",4,4,6]]
-    :[["walk",12,2,4],["run",12,1.2,2.2],["jump",22],["flip",14],["roll",9,1.6,1.6],["spin",8,.8,.8],["belly",9,2,3],["chase",6,2,4],["dance",5,2,2.6],["laugh",3,1.4,1.8],["wash",4,2,2.5],["stretch",3,1.4,1.4],["sit",3,1,2]];
+  const home=$("#v-home").classList.contains("on"),reading=(nira.sayUntil-Date.now())/1000;
+  /* kuch likha ho to chupchaap baitho, taaki padha ja sake */
+  if(reading>0)return niraMode("sit",reading+1);
+  /* [kaam, vazan, kam se kam sec, zyada se zyada] */
+  const table=!home?[["walk",20,3,5],["sit",42,5,10],["wash",16,3,4],["sleep",18,8,14],["stretch",4,1.4,1.4]]
+    :[["walk",28,3,6],["sit",24,4,8],["wash",11,3,4],["sleep",8,6,10],["stretch",6,1.4,1.4],["jump",10],["roll",4,1.6,1.6],["belly",4,2.5,4],["flip",2],["run",3,1,1.6]];
   let x=Math.random()*table.reduce((t,m)=>t+m[1],0);const m=table.find(m=>(x-=m[1])<0)||table[0];let [k,,a,b]=m;
-  if(Math.random()<.4)nira.dir*=-1;
-  if(k=="jump"){if(niraJump())return;k="flip"}
+  if(Math.random()<.25)nira.dir*=-1;
+  if(k=="jump"){if(niraJump())return;k="walk";a=3;b=5}
   if(k=="flip")return niraFlip();
-  if(k=="chase"&&!nira.toy&&Date.now()-nira.mAt>3000){k="run";a=1.2;b=2}
-  niraMode(k,rnd(a,b));
-  if(k=="laugh"){niraSay("hehe 😹",1800);sfx("hehe")}
-  if(k=="dance")niraSing();
-  if(k=="belly"&&Math.random()<.5)niraSay(nLine("belly"),2600);
-  if(k=="spin"||k=="roll")sfx("pop")}
+  niraMode(k,rnd(a,b))}
 
 /* ---------- khilone: titli aur oon ka gola ---------- */
 function niraToy(kind){
   const box=$("#nira");if(!box||nira.toy||calmMotion.matches)return;
-  const el=document.createElement("button");el.type="button";el.className="ntoy";el.textContent=kind=="ball"?"🧶":"🦋";el.setAttribute("aria-label",kind=="ball"?"Oon ka gola":"Titli");box.append(el);
+  const el=document.createElement("button");el.type="button";el.className="ntoy";el.textContent=kind=="ball"?"🧶":"🦋";el.setAttribute("aria-label",kind=="ball"?"Yarn ball":"Butterfly");box.append(el);
   const t=nira.toy={kind,el,x:rnd(innerWidth*.25,innerWidth*.75),y:kind=="ball"?-30:innerHeight*.7,vx:rnd(-90,90)||60,vy:0,age:0,hits:0};
   el.onclick=()=>{t.vy=-520;t.vx=rnd(-260,260);t.hits=0;sfx("pop")};
   niraSay(nLine("toy"),2000);nira.goal="";niraMode("chase",8)}
@@ -307,6 +304,9 @@ function niraPaw(){const box=$("#nira"),c=$("#ncat");if(!box||calmMotion.matches
   p.style.cssText=`left:${nira.x+c.offsetWidth*(nira.dir>0?.3:.6)}px;top:${nira.y+c.offsetHeight*.84}px;--r:${nira.dir*90}deg`;box.prepend(p);setTimeout(()=>p.remove(),2600)}
 
 /* ---------- naam ke BAGAL mein baithna ---------- */
+const nPhone=()=>innerWidth<=900;
+/* dialogue bolo, thoda ruko, phir niklo */
+function niraBye(){if(niraSay(pick(NBYE),4200,true)){nira.leaveAt=nira.sayUntil-900;niraMode("sit",9e9)}}
 const nameSpot=()=>[...document.querySelectorAll("aside .dev,.mfoot")].find(e=>e.offsetParent);
 function nSpot(){
   const d=nameSpot(),c=$("#ncat");if(!d||!c)return null;const dr=d.getBoundingClientRect();if(dr.top<60||dr.bottom>innerHeight+6)return null;
@@ -323,27 +323,27 @@ function niraNameStep(sp,dt,now){
   nira.x=sp.x;nira.y=sp.y;nira.dir=-1;
   const want=nira.focus&&!nira.focus.brk?"sleep":"sit";nira.t-=dt;
   if(nira.mode!=want&&(nira.t<=0||!["land","sit","shake","laugh","spin","stretch","dance"].includes(nira.mode)))niraMode(want,9e9);
-  if(want=="sit"&&now>nira.hbAt){nira.hbAt=now+3500;niraNotes(["♥","♥","♥"]);if(Math.random()<.2)niraSay(nLine("name"),3000)}}
+  if(want=="sit"&&now>nira.hbAt){nira.hbAt=now+5000;niraNotes(["♥","♥","♥"])}}
 
-function niraQuiz(){const q=pick(NQ);nira.q=q;nira.qOpen=1;nira.quizAt=Date.now()+rnd(150000,240000);niraMode("sit",15);const b=$("#nbub");b.innerHTML=`<b>🧠 ${esc(nName())}, ek chhota sawaal!</b><br>${esc(q[0])}<div class="qz">${q[1].map((o,i)=>`<button data-nq="${i}">${esc(o)}</button>`).join("")}<button class="lt" data-nq="x">Later</button></div>`;niraPos(b);b.classList.add("on","qzb");clearTimeout(nira.bt);nira.bt=setTimeout(()=>niraAns("x"),15000);sfx("meow")}
+function niraQuiz(){const q=pick(NQ);nira.q=q;nira.qOpen=1;nira.quizAt=Date.now()+rnd(300000,420000);niraMode("sit",30);const b=$("#nbub");b.innerHTML=`<b>🧠 ${esc(nName())}, quick question!</b><br>${esc(q[0])}<div class="qz">${q[1].map((o,i)=>`<button data-nq="${i}">${esc(o)}</button>`).join("")}<button class="lt" data-nq="x">Later</button></div>`;niraPos(b);b.classList.add("on","qzb");nira.sayUntil=Date.now()+30000;clearTimeout(nira.bt);nira.bt=setTimeout(()=>niraAns("x"),30000);sfx("meow")}
 function niraAns(i){if(!nira.qOpen)return;nira.qOpen=0;clearTimeout(nira.bt);const b=$("#nbub");b.classList.remove("qzb","on");const q=nira.q;
-  if(i=="x"){niraSay("Maybe later 😺",1800);niraMode("walk",3)}else if(+i==q[2])niraCheer("Correct! la la la ♪");else{niraMode("shake",1.4);niraSay("Oops! Answer: "+q[1][q[2]],3200);sfx("no")}}
+  if(i=="x"){nira.sayUntil=0;niraMode("walk",3)}else if(+i==q[2]){nira.sayUntil=0;niraCheer("Correct! la la la ♪")}else{niraMode("shake",1.4);niraSay("Oops! Answer: "+q[1][q[2]],4000,true);sfx("no")}}
 
 function focusTick(){const f=nira.focus;if(!f)return;const left=f.end-Date.now();if(left<=0){niraFocusStop(0);return}const s=Math.ceil(left/1000),tm=Math.floor(s/60)+":"+String(s%60).padStart(2,"0");$("#fbtn").textContent=(f.brk?"☕ ":"⏱ ")+tm;document.title="("+tm+") "+nira.ot}
-function focusStart(m){if(m=="0"){niraFocusStop(1);return}const brk=m[0]=="b",mins=+(brk?m.slice(1):m);nira.focus={end:Date.now()+mins*6e4,brk,mins};try{localStorage.setItem("nira-focus",JSON.stringify(nira.focus))}catch(e){}nira.ot=nira.ot||document.title;nira.goal=brk?"":"focus";clearInterval(nira.fi);nira.fi=setInterval(focusTick,1000);focusTick();niraSay(brk?"Break time! Stretch and sip some water 💧":"Focus mode ON. I'll nap while you study. Go go go! 📚",3200);sfx("ok")}
+function focusStart(m){if(m=="0"){niraFocusStop(1);return}const brk=m[0]=="b",mins=+(brk?m.slice(1):m);nira.focus={end:Date.now()+mins*6e4,brk,mins};try{localStorage.setItem("nira-focus",JSON.stringify(nira.focus))}catch(e){}nira.ot=nira.ot||document.title;nira.goal=brk?"":"focus";clearInterval(nira.fi);nira.fi=setInterval(focusTick,1000);focusTick();niraSay(brk?"Break time! Stretch and sip some water 💧":"Focus mode ON. I'll nap while you study 📚",3200,true);sfx("ok")}
 function niraFocusStop(manual){const f=nira.focus;nira.focus=null;nira.goal="";clearInterval(nira.fi);try{localStorage.removeItem("nira-focus")}catch(e){}const b=$("#fbtn");if(b)b.textContent="⏱️";if(nira.ot){document.title=nira.ot;nira.ot=0}if(!$("#ncat"))return;
-  if(manual){niraMode("walk",1);niraSay("Focus stopped. Back to playing! 🐾",2000)}else{sfx("bell");setTimeout(()=>sfx("meow"),800);niraMode("dance",4);niraSay(f&&f.brk?"Break over! Back to the books 📖":"Meow! Time's up! Great focus! 🎉",4000);niraNotes()}}
+  if(manual){niraMode("walk",1);niraSay("Focus stopped. Back to playing! 🐾",2000,true)}else{sfx("bell");setTimeout(()=>sfx("meow"),800);niraMode("dance",4);niraSay(f&&f.brk?"Break over! Back to the books 📖":"Meow! Time's up! Great focus! 🎉",4000,true);niraNotes()}}
 
 /* streak: local date (UTC nahi), pehla din bhi gina jata hai */
 const dayKey=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 function niraStreak(){try{const k="nira-days",d=JSON.parse(localStorage.getItem(k)||"[]"),c=new Date();if(!d.includes(dayKey(c))){d.push(dayKey(c));localStorage.setItem(k,JSON.stringify(d.slice(-60)))}let n=0;while(d.includes(dayKey(c))){n++;c.setDate(c.getDate()-1)}return n}catch(e){return 1}}
 
 function niraIntro(){if($("#nintro")||!$("#ncat"))return;const e=document.createElement("div");e.id="nintro";e.className="ni";
-  e.innerHTML=`<div class="nic" role="dialog" aria-label="Meet Nira"><canvas class="nip"></canvas><div><h3>Meow! I'm Nira, your engineer cat 🐱</h3><p>I'll keep you company while you prepare for RRB JE.</p><p>Hi <b>${esc(nName())}</b>! Google se login karoge to naam se bulaungi 🐾</p><div class="cta"><button class="btn p" data-ni="hi">Say hi</button><button class="btn" data-ni="skip">Skip</button></div></div></div>`;
+  e.innerHTML=`<div class="nic" role="dialog" aria-label="Meet Nira"><canvas class="nip"></canvas><div><h3>Meow! I'm Nira, your engineer cat 🐱</h3><p>I'll keep you company while you prepare for RRB JE.</p><p>Hi <b>${esc(nName())}</b>! Sign in with Google and I'll call you by name 🐾</p><div class="cta"><button class="btn p" data-ni="hi">Say hi</button><button class="btn" data-ni="skip">Skip</button></div></div></div>`;
   document.body.append(e);const cv=e.querySelector("canvas");
   (function frame(){if(!cv.isConnected)return;drawCat(cv,"sit",0,0,1,0,0);if(!calmMotion.matches)requestAnimationFrame(frame)})()}
 
-function niraPlace(){const c=$("#ncat");if(!c)return;c.classList.toggle("mini",!!nira.atName);c.style.transform=`translate(${nira.x}px,${nira.y}px)`}
+function niraPlace(){const c=$("#ncat");if(!c)return;c.classList.toggle("mini",!!nira.atName);c.style.visibility=nira.gone?"hidden":"";c.style.transform=`translate(${nira.x}px,${nira.y}px)`}
 function niraBind(c){
   const hit=c.querySelector(".nhit");
   hit.addEventListener("pointerdown",e=>{try{hit.setPointerCapture(e.pointerId)}catch(_){}nAudio();const d=nira.drag={ox:e.clientX-nira.x,oy:e.clientY-nira.y,sx:e.clientX,sy:e.clientY,mv:0,hold:0};d.ht=setTimeout(()=>{if(nira.drag===d&&!d.mv){d.hold=1;sfx("purr");niraNotes(["♥","♥","♥"]);niraSay("Purrrrr... 😻",2200);niraMode("sit",3)}},600);e.preventDefault()});
@@ -360,16 +360,30 @@ function niraBind(c){
 function niraStop(){niraSync()}
 function niraRest(on){
   nira.rest=on;nira.goal="";const b=$("#catb");if(b)b.title=on?"Nira ko khelne do":"Nira ko aaram karne do";
-  if(on){if(nira.qOpen){nira.qOpen=0;clearTimeout(nira.bt);$("#nbub").classList.remove("qzb","on")}const n=$("#nintro");if(n)n.remove();niraSay("Theek hai, main Rakesh Kumar Dudhawal ke bagal mein baithti hoon 🐾",3200)}
-  else{niraSay("Yay {n}! Ab dhamaal hoga 🤸",2400);niraLeave();nira.quizAt=Date.now()+rnd(150000,200000)}}
+  if(on){if(nira.qOpen){nira.qOpen=0;clearTimeout(nira.bt);$("#nbub").classList.remove("qzb","on")}const n=$("#nintro");if(n)n.remove();if(nira.toy){nira.toy.el.remove();nira.toy=null}niraBye()}
+  else{nira.leaveAt=0;niraSay("I'm back, {n}! 🐾",2400,true);if(nira.atName)niraLeave();else niraMode("stretch",1.4);nira.quizAt=Date.now()+rnd(240000,300000)}}
 function niraStep(dt,now){
   const c=$("#ncat"),W=c.offsetWidth,H=c.offsetHeight,FY=H*.94,vw=innerWidth,vh=innerHeight,floor=vh-4-FY,still=calmMotion.matches;
   if(nira.mode=="drag")return;
   const flying=nira.mode=="air"||nira.mode=="flip";
   if(nira.focus&&!nira.focus.brk&&!state.catOff)nira.goal="focus";
-  if(!nira.goal&&!state.catOff&&now-nira.idleAt>45000&&!nira.focus&&!nira.qOpen&&!nira.toy)nira.goal="credit";
+  if(!nira.goal&&!state.catOff&&now-nira.idleAt>45000&&!nira.focus&&!nira.qOpen&&!nira.toy&&now>nira.sayUntil){nira.goal="credit";if(!nira.atName&&!flying)niraBye()}
+  const wantName=state.catOff||nira.goal=="credit";
+  if(!wantName)nira.leaveAt=0;
+  if(nira.gone){ /* phone par: screen ke bahar, jab tak naam wala hissa na dikhe */
+    const sp=wantName&&nSpot();
+    if(sp){nira.gone=false;nira.atName=true;nira.x=sp.x;nira.y=sp.y;niraMode("sit",9e9)}
+    else{if(!wantName){nira.gone=false;nira.atName=false;nira.plat=null;nira.y=vh;nira.vy=-650;nira.vx=0;nira.bounced=1;niraMode("air",0)}return}}
+  if(nira.sink){ /* neeche utar rahi hai */
+    if(!wantName){nira.sink=false;nira.vy=-500;niraMode("air",0);return}
+    nira.vy+=1100*dt;nira.y+=nira.vy*dt;if(nira.y>vh){nira.sink=false;nira.gone=true;$("#nbub").classList.remove("on")}return}
+  if(wantName&&now<nira.leaveAt){if(!flying){if(nira.mode!="sit")niraMode("sit",9e9);if(nira.plat){const r=nira.plat.getBoundingClientRect();nira.y=r.top-FY}else nira.y=floor;return}}
   if(!flying){
-    const sp=state.catOff||nira.goal=="credit"?nSpot():null;
+    const sp=wantName?nSpot():null;
+    if(wantName&&!sp&&nPhone()){
+      if(nira.atName){nira.atName=false;nira.gone=true}
+      else{nira.sink=true;nira.plat=null;nira.vy=-260;niraMode("air",0)}
+      return}
     if(sp)return niraNameStep(sp,dt,now);
     if(nira.atName)return niraLeave();
     if(state.catOff){nira.plat=null;nira.y=floor;nira.x=Math.max(0,Math.min(vw-W,nira.x));if(nira.mode!="sit")niraMode("sit",9e9);return}}
@@ -407,16 +421,16 @@ function niraLoop(ts){
   nira.age+=dt;nira.phase=(nira.phase+dt*(nira.mode=="run"?2.6:nira.mode=="chase"?1.9:1.15))%1;
   if(!state.catOff&&ts-nira.plT>600){niraPlats();nira.plT=ts}
   niraStep(dt,now);niraToyStep(dt);
-  const free=!state.catOff&&!nira.focus&&!nira.goal&&!document.hidden&&!$("#nintro")&&!nira.drag;
-  if(free&&!nira.qOpen&&!nira.toy&&now>nira.toyAt&&nira.mode!="air"&&nira.mode!="flip"){nira.toyAt=now+rnd(30000,55000);niraToy(pick(["ball","fly"]))}
+  const free=!state.catOff&&!nira.gone&&!nira.sink&&!nira.focus&&!nira.goal&&!document.hidden&&!$("#nintro")&&!nira.drag;
+  if(free&&$("#v-home").classList.contains("on")&&!nira.qOpen&&!nira.toy&&now>nira.toyAt&&nira.mode!="air"&&nira.mode!="flip"){nira.toyAt=now+rnd(120000,200000);niraToy(pick(["ball","fly"]))}
   if((nira.mode=="run"||nira.mode=="chase")&&ts>nira.pawAt){nira.pawAt=ts+190;niraPaw()}
   /* login hua to naam se swagat, na ho to kabhi kabhi yaad dilana */
   const who=typeof user!="undefined"&&user?user.id:null;
-  if(who&&who!==nira.who){nira.who=who;if(!state.catOff){niraCheer("Aha! Ab pata chala, tum {n} ho! 💛")}}else if(!who)nira.who=null;
-  if(free&&!nira.qOpen&&now>nira.loginAt&&nira.mode!="air"&&nira.mode!="flip")nira.loginAt=now+(niraAskLogin()?rnd(180000,260000):15000);
+  if(who&&who!==nira.who){nira.who=who;if(!state.catOff){niraCheer("Oh, so you are {n}! 💛")}}else if(!who)nira.who=null;
+  if(free&&!nira.qOpen&&nira.asked<2&&now>nira.loginAt&&now>nira.sayUntil&&nira.mode!="air"&&nira.mode!="flip"){if(niraAskLogin()){nira.asked++;nira.loginAt=now+rnd(480000,600000)}else nira.loginAt=now+20000}
   if(!state.catOff&&!nira.qOpen&&!document.hidden&&!$("#nintro")&&!nira.drag&&nira.mode!="air"){
-    if(now>nira.quizAt&&!nira.focus)niraQuiz();
-    else if(now>nira.talkAt&&nira.mode!="sleep"){nira.talkAt=now+rnd(22000,40000);niraSay(Math.random()<.2?nTimeLine():pick(NF))}}
+    if(now>nira.quizAt&&now>nira.sayUntil&&!nira.focus)niraQuiz();
+    else if(now>nira.talkAt&&nira.mode!="sleep"){nira.talkAt=now+rnd(100000,170000);niraSay(Math.random()<.2?nTimeLine():pick(NF))}}
   niraPlace();
   /* sone ya shant mode mein kam frames: battery bachti hai */
   if(ts-nira.drawT<(nira.mode=="sleep"||calmMotion.matches?90:0))return;nira.drawT=ts;
@@ -429,12 +443,12 @@ function niraSync(){
   const e=document.createElement("div");e.id="nira";e.className="nira";
   e.innerHTML=`<div class="nc air" id="ncat"><div class="nb" id="nbub"></div><span class="zz">z z z</span><canvas aria-hidden="true"></canvas><div class="nhit" tabindex="0" role="button" aria-label="Nira the engineer cat"></div></div>`;
   document.body.append(e);const c=$("#ncat");
-  Object.assign(nira,{x:Math.max(10,innerWidth*.35),y:-160,vx:0,vy:0,mode:"air",dir:1,plat:null,goal:"",last:0,bounced:0,idleAt:Date.now(),quizAt:Date.now()+rnd(150000,200000),talkAt:Date.now()+20000,qOpen:0,drag:null,atName:false,target:false,toy:null,toyAt:Date.now()+18000,loginAt:Date.now()+14000,pawAt:0,who:null});
+  Object.assign(nira,{x:Math.max(10,innerWidth*.35),y:-160,vx:0,vy:0,mode:"air",dir:1,plat:null,goal:"",last:0,bounced:0,idleAt:Date.now(),quizAt:Date.now()+rnd(240000,300000),talkAt:Date.now()+60000,qOpen:0,drag:null,atName:false,target:false,toy:null,toyAt:Date.now()+75000,loginAt:Date.now()+45000,asked:0,sayUntil:0,gone:false,sink:false,leaveAt:0,pawAt:0,who:null});
   niraBind(c);nira.rest=!!state.catOff;
   try{const f=JSON.parse(localStorage.getItem("nira-focus")||"null");if(f&&f.end>Date.now()){nira.focus=f;nira.ot=document.title;nira.goal=f.brk?"":"focus";clearInterval(nira.fi);nira.fi=setInterval(focusTick,1000);focusTick()}}catch(_){}
   let seen=1;try{seen=localStorage.getItem("nira-intro-v3")}catch(_){}
   const n=niraStreak();
-  if(!seen&&!state.catOff)setTimeout(niraIntro,1800);else if(!state.catOff) setTimeout(()=>niraSay(n>=3?"{n}, "+n+" din lagatar padha! Aag lagi hai 🔥":n==2?"{n}, lagatar doosra din! Mujhe proud hai 🔥":nTimeLine(),5000),2200);
+  if(!seen&&!state.catOff)setTimeout(niraIntro,1800);else if(!state.catOff) setTimeout(()=>niraSay(n>=3?n+" days in a row, {n}! You are on fire 🔥":n==2?"Day 2 in a row, {n}! So proud 🔥":nTimeLine(),5000),2200);
   nira.raf=requestAnimationFrame(niraLoop)}
 
 ["mousemove","keydown","scroll","touchstart","wheel","click"].forEach(ev=>addEventListener(ev,e=>{nira.idleAt=Date.now();if(ev=="mousemove"){nira.mx=e.clientX;nira.my=e.clientY;nira.mAt=Date.now()}if(nira.goal=="credit"&&!state.catOff){nira.goal="";nira.t=Math.min(nira.t,1)}},{passive:true}));
