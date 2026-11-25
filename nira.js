@@ -9,7 +9,8 @@ const NIRA_VOL={meow:.8,purr:.7,la:.45,hehe:.6};
 /* {n} ki jagah login wale ka naam (login na ho to "user"). Baatein English mein, sirf jaate waqt ka dialogue Hindi mein. */
 const NF=[
 "{n}, you study. I'll handle being cute ✨",
-"Today's plan: you finish 2 topics, I finish 2 naps 😴",
+"Today's plan: two topics, then a happy dance 💃",
+"Ask me what to study next. Just click me 🐾",
 "Tiny reminder, {n}: drink some water 💧",
 "I sniffed the whole syllabus. Control systems smells spicy 🌶️",
 "Junior Engineer {n}... sounds lovely, right? 🚆",
@@ -23,13 +24,11 @@ const NBYE=["लो, मैं चली... याद आए तो पुका
 const NLINE={
  poke:["Meow! Yes, {n}? 🐾","Hey, that tickles! 😹","So much love? A fish would be nice too 🐟","You booped me. You're mine now 😼"],
  drag:["Wheee! Gently, please 🙀","Careful with my helmet! ⛑️"],
- flip:["Did you see that, {n}? 10 out of 10! 🤸"],
- belly:["Belly rubs? It might be a trap 😼"],
  toy:["Ooh, mine! 👀"],
  pet:["Purrrr... right there, {n} 😻","Mmm, behind the ears... perfect 💛"],
  login:["I'd love to call you by name. Sign in with Google? 🥺","Sign in, {n}, so your progress stays safe 💛"]};
 function nName(){const u=typeof user!="undefined"&&user;if(!u)return"user";const m=u.user_metadata||{};return String(m.full_name||m.name||(u.email||"user").split("@")[0]).trim().split(/\s+/)[0]}
-const nLine=k=>pick(NLINE[k]);
+const nLine=k=>fresh(NLINE[k]);
 function nTimeLine(){const h=new Date().getHours(),d=state.exam?Math.ceil((new Date(state.exam)-Date.now())/864e5):0;
   if(d>0&&Math.random()<.5)return"{n}, "+d+" days to the exam. One topic at a time 💪";
   return h<5?"Up this late, {n}? That's my job 🦉":h<12?"Good morning, {n}! Hardest topic first ☀️":h<17?"Afternoon sleepiness? Same, {n} 😪":h<21?"Evening, {n}. Revision time 🌇":"One last PYQ set, then sleep, {n} 🌙"}
@@ -37,6 +36,8 @@ function nTimeLine(){const h=new Date().getHours(),d=state.exam?Math.ceil((new D
 const NQ=[["AND gate: output for inputs 1 and 0?",["0","1","Undefined"],0],["Unit of capacitance?",["Henry","Farad","Ohm"],1],["A diode conducts in which bias?",["Forward","Reverse","Both"],0],["Decimal 5 in binary?",["101","110","011"],0],["Ideal op-amp input impedance?",["Zero","Infinite","50 ohm"],1],["8085 is a ___ bit microprocessor.",["4","8","16"],1],["Which gate is universal?",["XOR","NAND","AND"],1],["AC frequency in India?",["50 Hz","60 Hz","100 Hz"],0],["Diodes in a bridge rectifier?",["2","4","6"],1],["PN junctions in an SCR?",["2","3","4"],1],["Unit of inductance?",["Henry","Farad","Tesla"],0],["Power = ?",["V x I","V / I","I / V"],0],["Kirchhoff's current law is based on conservation of?",["Energy","Charge","Momentum"],1],["An ADC converts?",["Digital to analog","Analog to digital","AC to DC"],1],["In series resonance, XL equals?",["XC","R","0"],0]];
 
 const rnd=(a,b)=>a+Math.random()*(b-a),pick=a=>a[Math.floor(Math.random()*a.length)];
+const bags=new Map(),lastOf=new Map();
+function fresh(list){let bag=bags.get(list);if(!bag||!bag.length){bag=list.slice().sort(()=>Math.random()-.5);if(bag.length>1&&bag[bag.length-1]===lastOf.get(list))bag.unshift(bag.pop());bags.set(list,bag)}const x=bag.pop();lastOf.set(list,x);return x}
 const calmMotion=window.matchMedia?matchMedia("(prefers-reduced-motion: reduce)"):{matches:false};
 let nira={x:60,y:-220,vx:0,vy:0,dir:1,mode:"air",t:0,age:0,phase:0,plat:null,raf:0,last:0,drawT:0,n:0,clicks:[],bt:0,idleAt:Date.now(),mx:-1,my:-1,mAt:0,pl:[],plT:0,drag:null,goal:"",quizAt:0,talkAt:0,qOpen:0,hbAt:0,lastUp:0,focus:null,fi:0,ot:0,q:null,bounced:0,skip:null,skipT:0};
 
@@ -185,18 +186,19 @@ function drawCat(cv,mode,age,phase,dir,vy,look){
   const c=cv.getContext("2d");c.setTransform(cv.width/170,0,0,cv.height/130,0,0);c.clearRect(0,0,170,130);
   const t=age,S=Math.sin,still=calmMotion.matches,breath=still?0:S(performance.now()/620),blink=performance.now()%4300<140?0:1;
   const o={eye:blink,look:look||0,wide:mode=="chase"||mode=="drag"||mode=="air",mouth:0,twitch:performance.now()%2900<160?1.2:0};
-  if(mode!="air"&&mode!="flip"&&mode!="drag"){c.fillStyle="rgba(20,10,0,.2)";c.fill(ell(84,123,mode=="sleep"?50:44,4))}
+  if(mode!="air"&&mode!="drag"){c.fillStyle="rgba(20,10,0,.2)";c.fill(ell(84,123,mode=="sleep"?50:44,4))}
   if(dir<0){c.translate(170,0);c.scale(-1,1)}
   const wag=still?0:S(performance.now()/(mode=="chase"||mode=="laugh"?170:mode=="sit"?330:540));
   if(mode=="sleep"){
     put(c,SPR.loaf,80,93,0,1+breath*.008,1+breath*.025);
     c.save();c.translate(112,99+breath*.7);c.scale(.96,.96);o.eye=0;head(c,0,0,.28,o);c.restore();
     tail(c,[[40,103],[26,130],[80,124],[112+wag*2,118]],5);locket(c,128,119,dir);return}
-  if(mode=="spin"){c.translate(84,0);c.scale(Math.cos(t/.8*Math.PI*2)||.02,1);c.translate(-84,0)}
-  if(mode=="roll"){const k=Math.min(1,t/1.6),e=k*k*(3-2*k);c.translate(84,92);c.rotate(e*Math.PI*2);c.translate(-84,-92)}
-  if(mode=="flip"){c.translate(84,82);c.rotate(-Math.min(1,t/.72)*Math.PI*2);c.translate(-84,-82)}
-  /* peeth ke bal ulta letna, panje hawa mein */
-  if(mode=="belly"){c.translate(84,77);c.rotate(Math.PI+S(t*3)*.07);c.translate(-84,-77);o.eye=blink*.75}
+  /* aaraam se letkar panje se khelna (lotpot) */
+  if(mode=="lie"){const k=still?0:S(performance.now()/260);
+    put(c,SPR.loaf,78,100,0,1,.82+breath*.02);
+    leg(c,SPR.fu,SPR.fl,104,100,134,112-Math.max(0,k)*9,1,true);leg(c,SPR.fu,SPR.fl,108,104,138,116-Math.max(0,-k)*9,1);
+    tail(c,[[40,108],[14,122],[24,96+wag*6],[8,92+wag*8]],5);
+    collar(c,112,95);head(c,113,76,.2+k*.06,o);locket(c,112,103,dir);return}
   if(["sit","wash","shake","laugh"].includes(mode)){
     const wash=mode=="wash",lap=S(t*9);
     if(mode=="laugh"){o.eye=0;o.mouth=.6+.4*Math.abs(S(t*14));c.translate(0,-Math.abs(S(t*14))*2)}
@@ -209,7 +211,7 @@ function drawCat(cv,mode,age,phase,dir,vy,look){
     if(wash){o.eye=.1;o.mouth=lap>0?.45:0}
     head(c,wash?111:109,(wash?55+lap*2:47)+breath*.5,wash?.3+lap*.05:mode=="shake"?S(t*26)*.22*Math.max(0,1-t):S(performance.now()/1900)*.05,o);locket(c,107,wash?82:74,dir);return}
   /* khadi, chalti, daudti, kudti */
-  const walk=mode=="w",run=mode=="run",air=mode=="air"||mode=="flip",drag=mode=="drag",dance=mode=="dance",str=mode=="stretch";
+  const walk=mode=="w"||mode=="spin",run=mode=="run",air=mode=="air",drag=mode=="drag",dance=mode=="dance",str=mode=="stretch";
   let bob=breath*.4,pitch=0,sh=[104,85],hip=[60,85];
   const feet={hf:[58,119],hn:[66,119],ff:[104,119],fn:[112,119]};
   if(walk||run){const stride=run?19:11,lift=run?10:6,off=run?{hf:0,hn:.08,ff:.5,fn:.58}:{hf:0,ff:.25,hn:.5,fn:.75};
@@ -218,7 +220,6 @@ function drawCat(cv,mode,age,phase,dir,vy,look){
     bob=run?S(phase*6.283)*4:S(phase*12.566)*1.1;pitch=run?S(phase*6.283+1)*.1:0}
   if(air){const up=vy<0;pitch=Math.max(-.35,Math.min(.35,vy/1600));feet.fn=[up?128:124,up?96:114];feet.ff=[up?122:116,up?100:116];feet.hn=[up?40:60,up?108:104];feet.hf=[up?34:52,up?104:102]}
   if(drag){const s=still?0:S(performance.now()/180)*3;pitch=-.42;sh=[104,70];hip=[66,92];feet.fn=[114+s,102];feet.ff=[106-s,101];feet.hn=[66-s,124];feet.hf=[56+s,122];o.mouth=.35}
-  if(mode=="belly"){const k=S(t*7);feet.fn=[117+k*6,108-k*5];feet.ff=[103-k*5,106+k*5];feet.hn=[70+k*3,112];feet.hf=[54-k*3,110]}
   if(mode=="land"){const k=Math.max(0,1-t/.35);bob=k*8}
   if(str){const k=S(Math.min(1,t/1.4)*Math.PI);pitch=k*.3;sh=[104,85+k*19];hip=[60,85-k*3];feet.fn[0]+=k*18;feet.ff[0]+=k*16;o.eye=1-k;o.mouth=k}
   if(dance){const k=S(t*8);bob=-Math.abs(k)*9;pitch=-.5;sh=[98,68];hip=[66,92];feet.fn=[124,66+k*9];feet.ff=[116,66-k*9];o.mouth=.5+.5*Math.abs(k);o.eye=blink*.6}
@@ -235,14 +236,9 @@ function drawCat(cv,mode,age,phase,dir,vy,look){
 /* ---------- BEHAVIOUR ---------- */
 function niraPos(b){b.className="nb"+(nira.x<140?" bl":nira.x>innerWidth-260?" br":"")+(nira.y<90?" bd":"")}
 /* har baar alag andaaz: lehar, pop, rang-birange, jhatka */
-function nFancy(b,text){
-  const hindi=/[\u0900-\u097F]/.test(text),style=hindi?"pop":pick(["wave","pop","rain","jelly"]);b.textContent="";b.classList.add("s-"+style);let i=0;
-  text.split(" ").forEach((word,n)=>{if(n)b.append(" ");const w=document.createElement("span");w.className="nira-w";
-    /* Hindi ke akshar jude rehte hain, isliye poora shabd ek saath */
-    (hindi?[word]:Array.from(word)).forEach(ch=>{const c=document.createElement("span");c.className="nira-ch";c.textContent=ch;c.style.setProperty("--i",hindi?i*5:i);c.style.setProperty("--h",(i*(hindi?60:23)+260)%360);i++;w.append(c)});b.append(w)})}
 /* force sirf zaroori baat ke liye. Lautata hai: dikhaya ya nahi */
 function niraSay(s,ms,force){const b=$("#nbub");if(!b||nira.qOpen||nira.gone||(!force&&Date.now()<nira.sayUntil))return false;
-  s=String(s).replace(/\{n\}/g,nName());niraPos(b);nFancy(b,s);b.setAttribute("aria-label",s);b.classList.add("on");
+  s=String(s).replace(/\{n\}/g,nName());niraPos(b);b.textContent=s;b.setAttribute("aria-label",s);b.classList.add("on");
   const time=Math.max(ms||0,3000+s.length*90);nira.sayUntil=Date.now()+time;clearTimeout(nira.bt);nira.bt=setTimeout(()=>b.classList.remove("on","qzb"),time);return true}
 function niraAskLogin(force){
   const can=force||(typeof sb!="undefined"&&sb&&!user);const b=$("#nbub");if(!can||!b||nira.qOpen)return false;
@@ -252,15 +248,35 @@ function niraNotes(ch){const c=$("#ncat");if(!c)return;(ch||["♪","♫","♪"])
 function niraMode(m,t){const mode={walk:"w",chase:"chase"}[m]||m;if(nira.mode!=mode)nira.age=0;nira.mode=mode;nira.t=t;const c=$("#ncat");if(c)c.className="nc "+mode}
 function niraSing(s,ms){niraSay(s||"♪ la... la la ♪",ms||3800);sfx("la");niraNotes()}
 /* Mock / sahi jawab = naach, topic complete = khushi mein ghoomna */
-function niraCheer(s){if(!$("#ncat")||state.catOff)return;if(!s||/Mock|Correct|meet/.test(s))niraMode("dance",2.6);else niraMode("spin",.8);niraSing(s)}
+function niraCheer(s){if(!$("#ncat")||state.catOff)return;if(!s||/Mock|Correct|meet/.test(s))niraMode("dance",2.6);else niraMode("spin",2.4);niraSing(s)}
 function niraReact(ok){if(!$("#ncat")||state.catOff)return;if(!$("#v-home").classList.contains("on")&&Math.random()<.5)return;if(ok)niraCheer("Correct! la la la ♪");else{niraMode("shake",1.4);niraSay(pick(["Oops! Try the next one.","Mistakes teach more than marks.","Shake it off. You've got this!"]),2200);sfx("no")}}
 function niraHearts(){if(calmMotion.matches)return;for(let i=0;i<16;i++){const h=document.createElement("span");h.className="nheart";h.textContent="❤️";
   h.style.cssText=`left:${rnd(4,94)}vw;font-size:${rnd(13,24)}px;animation-delay:${rnd(0,1.4)}s;--dx:${rnd(-40,40)}px`;document.body.append(h);setTimeout(()=>h.remove(),5600)}}
+/* ---------- ASSISTANT ---------- */
+function nBubble(html,ms){const b=$("#nbub");if(!b||nira.qOpen)return;b.innerHTML=html;niraPos(b);b.classList.add("on","qzb");nira.sayUntil=Date.now()+ms;clearTimeout(nira.bt);nira.bt=setTimeout(nClose,ms)}
+function nClose(){nira.sayUntil=0;const b=$("#nbub");if(b)b.classList.remove("on","qzb")}
+const nBtn=(k,t)=>`<button type="button" data-na="${k}">${t}</button>`;
+function niraMenu(){niraMode("sit",14);nBubble(`How can I help, ${esc(nName())}?<div class="qz qz2">${nBtn("next","📌 What next?")}${nBtn("progress","📊 My progress")}${nBtn("focus","⏱ Focus 25 min")}${nBtn("quiz","🧠 Quiz me")}${nBtn("pyq","📝 Practice PYQs")}${nBtn("close","✕ Close")}</div>`,14000)}
+/* sabse zyada pooche gaye topic jo abhi complete nahi */
+function nNext(){const left=Object.keys(nameOf).filter(c=>state.st[c]!=3).sort((a,b)=>cnt(b).n-cnt(a).n);return left[0]}
+function nAssist(k){
+  niraMode("sit",9);
+  if(k=="close")return nClose();
+  if(k=="focus"){nClose();return focusStart("25")}
+  if(k=="quiz"){nClose();return niraQuiz()}
+  if(k=="pyq"){nClose();location.hash="pyq";niraSay("Here are the PYQs. You've got this! 📝",3000,true);return}
+  if(k=="syllabus"){nClose();location.hash="syllabus";return}
+  if(k=="next"){const c=nNext();return nBubble(c?`Study next: <b>${esc(nameOf[c])}</b><br>${cnt(c).n} questions in past papers.<div class="qz">${nBtn("syllabus","Open syllabus")}${nBtn("close","✕ Close")}</div>`:`All topics are complete. Time for mock tests! 🎉<div class="qz">${nBtn("close","✕ Close")}</div>`,12000)}
+  if(k=="progress"){const done=Object.keys(nameOf).filter(c=>state.st[c]==3).length,days=state.exam?Math.ceil((new Date(state.exam)-Date.now())/864e5):0,best=state.mocks.length?Math.max(...state.mocks.map(mnet)).toFixed(1):null;
+    nBubble(`Progress: <b>${progress()}%</b><br>${done} of ${Object.keys(nameOf).length} topics complete`+(days>0?`<br>${days} days to the exam`:"")+(best?`<br>Best mock: ${best}`:"")+`<div class="qz">${nBtn("next","📌 What next?")}${nBtn("close","✕ Close")}</div>`,12000)}}
+addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("[data-na]");if(t){e.stopPropagation();nAssist(t.dataset.na)}},true);
+
 function niraPoke(){
+  if(state.catOff){sfx("meow");niraSay("Shh... I'm napping. Press 🐱 to wake me 😴",2600,true);return}
   const now=Date.now();nira.n++;nira.clicks=nira.clicks.filter(t=>now-t<2500).concat(now);
-  if(nira.n%7==0){niraMode("dance",3);niraSay("Sunshine mode ON ☀️ ♪ la... la la ♪",4200,true);sfx("la");niraNotes();niraHearts()}
-  else if(nira.clicks.length>=3){niraMode("sit",2.4);niraSay(nLine("pet"),2600);sfx("purr");niraNotes(["♥","♥","♥"])}
-  else{sfx("meow");niraSay(Math.random()<.6?nLine("poke"):pick(NF));niraMode("sit",1.4)}}
+  if(nira.n%7==0){niraMode("dance",3);nClose();niraSay("Sunshine mode ON ☀️ ♪ la... la la ♪",4200,true);sfx("la");niraNotes();niraHearts()}
+  else if(nira.clicks.length>=3){niraMode("sit",2.4);nClose();niraSay(nLine("pet"),2600);sfx("purr");niraNotes(["♥","♥","♥"])}
+  else{sfx("meow");niraMenu()}}
 function niraPlats(){const vh=innerHeight,vw=innerWidth;nira.pl=[...document.querySelectorAll(".card,.ntile,.sc,.nrow,.cro,.meter,.dev,.mfoot,nav a,.btn,.ring")].filter(e=>{const r=e.getBoundingClientRect();return r.width>56&&r.top>90&&r.top<vh-40&&r.left<vw&&r.right>0&&e.offsetParent!==null&&!e.closest(".ni")})}
 function niraJump(el){
   const c=$("#ncat"),W=c.offsetWidth,H=c.offsetHeight,FY=H*.94,fx=nira.x+W/2,fy=nira.y+FY,G=1700;
@@ -269,18 +285,17 @@ function niraJump(el){
   const [e,r]=pick(cand),h=fy-r.top,A=Math.max(h,0)+70,vy=-Math.sqrt(2*G*A),T=Math.sqrt(2*A/G)+Math.sqrt(2*(A-h)/G);
   const aim=el?(r.left+r.right)/2-W/2:fx-W/2+rnd(-35,35),px=Math.min(r.right-W*.7,Math.max(r.left-W*.3,aim));
   nira.vx=(px-nira.x)/T;nira.vy=vy;nira.dir=nira.vx>=0?1:-1;nira.plat=null;nira.bounced=1;niraMode("air",0);return true}
-function niraFlip(){nira.plat=null;nira.vy=-600;nira.vx=nira.dir*50;nira.bounced=1;nira.age=0;niraMode("flip",0)}
+function niraHop(){nira.plat=null;nira.vy=-520;nira.vx=nira.dir*40;nira.bounced=1;niraMode("air",0)}
 function niraPick(){
   const home=$("#v-home").classList.contains("on"),reading=(nira.sayUntil-Date.now())/1000;
   /* kuch likha ho to chupchaap baitho, taaki padha ja sake */
   if(reading>0)return niraMode("sit",reading+1);
-  /* [kaam, vazan, kam se kam sec, zyada se zyada] */
-  const table=!home?[["walk",20,3,5],["sit",42,5,10],["wash",16,3,4],["sleep",18,8,14],["stretch",4,1.4,1.4]]
-    :[["walk",28,3,6],["sit",24,4,8],["wash",11,3,4],["sleep",8,6,10],["stretch",6,1.4,1.4],["jump",10],["roll",4,1.6,1.6],["belly",4,2.5,4],["flip",2],["run",3,1,1.6]];
+  /* [kaam, vazan, kam se kam sec, zyada se zyada] ; neend yahan nahi, wo sirf off hone par */
+  const table=!home?[["walk",40,3,6],["sit",38,3,6],["wash",14,3,4],["lie",8,3,5]]
+    :[["walk",46,4,7],["sit",20,2.5,5],["wash",10,3,4],["lie",7,3,5],["stretch",6,1.4,1.4],["jump",13],["run",5,1.2,2],["spin",4,2.4,2.4]];
   let x=Math.random()*table.reduce((t,m)=>t+m[1],0);const m=table.find(m=>(x-=m[1])<0)||table[0];let [k,,a,b]=m;
   if(Math.random()<.25)nira.dir*=-1;
   if(k=="jump"){if(niraJump())return;k="walk";a=3;b=5}
-  if(k=="flip")return niraFlip();
   niraMode(k,rnd(a,b))}
 
 /* ---------- khilone: titli aur oon ka gola ---------- */
@@ -297,23 +312,23 @@ function niraToyStep(dt){
   t.el.style.transform=`translate(${t.x}px,${t.y}px) rotate(${t.kind=="ball"?t.x*2:Math.sin(t.age*14)*14}deg)`;
   const c=$("#ncat"),cx=nira.x+c.offsetWidth/2;
   if(nira.mode=="chase"&&Math.abs(t.x-cx)<30&&t.hits<4){t.hits++;
-    if(t.kind=="ball"){t.vx=nira.dir*rnd(160,300);t.vy=-rnd(150,320);sfx("pop")}else niraFlip()}
+    if(t.kind=="ball"){t.vx=nira.dir*rnd(160,300);t.vy=-rnd(150,320);sfx("pop")}else niraHop()}
   if(t.age>10||t.y<-60&&t.age>2){t.el.remove();nira.toy=null}
-  else if(nira.mode!="chase"&&nira.mode!="air"&&nira.mode!="flip"&&nira.mode!="drag"&&nira.mode!="land")niraMode("chase",3)}
+  else if(nira.mode!="chase"&&nira.mode!="air"&&nira.mode!="drag"&&nira.mode!="land")niraMode("chase",3)}
 function niraPaw(){const box=$("#nira"),c=$("#ncat");if(!box||calmMotion.matches)return;const p=document.createElement("span");p.className="npaw";p.textContent="🐾";
   p.style.cssText=`left:${nira.x+c.offsetWidth*(nira.dir>0?.3:.6)}px;top:${nira.y+c.offsetHeight*.84}px;--r:${nira.dir*90}deg`;box.prepend(p);setTimeout(()=>p.remove(),2600)}
 
 /* ---------- naam ke BAGAL mein baithna ---------- */
 const nPhone=()=>innerWidth<=900;
 /* dialogue bolo, thoda ruko, phir niklo */
-function niraBye(){if(niraSay(pick(NBYE),4200,true)){nira.leaveAt=nira.sayUntil-900;niraMode("sit",9e9)}}
+function niraBye(){if(niraSay(fresh(NBYE),4200,true)){nira.leaveAt=nira.sayUntil-900;niraMode("sit",9e9)}}
 const nameSpot=()=>[...document.querySelectorAll("aside .dev,.mfoot")].find(e=>e.offsetParent);
 function nSpot(){
   const d=nameSpot(),c=$("#ncat");if(!d||!c)return null;const dr=d.getBoundingClientRect();if(dr.top<60||dr.bottom>innerHeight+6)return null;
   let right=0;const w=document.createTreeWalker(d.lastElementChild,NodeFilter.SHOW_TEXT),g=document.createRange();
   while(w.nextNode()){g.selectNodeContents(w.currentNode);right=Math.max(right,g.getBoundingClientRect().right)}
   const W=c.offsetWidth,H=c.offsetHeight;
-  return{x:Math.min(innerWidth-W*.7,right+2-W*.224),y:Math.min(innerHeight-2,dr.bottom)-H*.94}}
+  return{x:Math.min(innerWidth-W*.7,right+2-W*.224+(state.catOff?W*.13:0)),y:Math.min(innerHeight-2,dr.bottom)-H*.94}}
 function niraLeave(){nira.atName=false;nira.target=false;nira.plat=null;nira.vx=70;nira.vy=-330;nira.dir=1;nira.bounced=1;niraMode("air",0)}
 function niraNameStep(sp,dt,now){
   if(!nira.atName){
@@ -321,7 +336,7 @@ function niraNameStep(sp,dt,now){
     else{const h=nira.y-sp.y,A=Math.max(h,0)+60,T=Math.sqrt(2*A/1700)+Math.sqrt(2*Math.max(1,A-h)/1700);
       nira.plat=null;nira.target=true;nira.vy=-Math.sqrt(3400*A);nira.vx=(sp.x-nira.x)/T;nira.dir=nira.vx>=0?1:-1;niraMode("air",0);return}}
   nira.x=sp.x;nira.y=sp.y;nira.dir=-1;
-  const want=nira.focus&&!nira.focus.brk?"sleep":"sit";nira.t-=dt;
+  const want=state.catOff?"sleep":"sit";nira.t-=dt;
   if(nira.mode!=want&&(nira.t<=0||!["land","sit","shake","laugh","spin","stretch","dance"].includes(nira.mode)))niraMode(want,9e9);
   if(want=="sit"&&now>nira.hbAt){nira.hbAt=now+5000;niraNotes(["♥","♥","♥"])}}
 
@@ -330,7 +345,7 @@ function niraAns(i){if(!nira.qOpen)return;nira.qOpen=0;clearTimeout(nira.bt);con
   if(i=="x"){nira.sayUntil=0;niraMode("walk",3)}else if(+i==q[2]){nira.sayUntil=0;niraCheer("Correct! la la la ♪")}else{niraMode("shake",1.4);niraSay("Oops! Answer: "+q[1][q[2]],4000,true);sfx("no")}}
 
 function focusTick(){const f=nira.focus;if(!f)return;const left=f.end-Date.now();if(left<=0){niraFocusStop(0);return}const s=Math.ceil(left/1000),tm=Math.floor(s/60)+":"+String(s%60).padStart(2,"0");$("#fbtn").textContent=(f.brk?"☕ ":"⏱ ")+tm;document.title="("+tm+") "+nira.ot}
-function focusStart(m){if(m=="0"){niraFocusStop(1);return}const brk=m[0]=="b",mins=+(brk?m.slice(1):m);nira.focus={end:Date.now()+mins*6e4,brk,mins};try{localStorage.setItem("nira-focus",JSON.stringify(nira.focus))}catch(e){}nira.ot=nira.ot||document.title;nira.goal=brk?"":"focus";clearInterval(nira.fi);nira.fi=setInterval(focusTick,1000);focusTick();niraSay(brk?"Break time! Stretch and sip some water 💧":"Focus mode ON. I'll nap while you study 📚",3200,true);sfx("ok")}
+function focusStart(m){if(m=="0"){niraFocusStop(1);return}const brk=m[0]=="b",mins=+(brk?m.slice(1):m);nira.focus={end:Date.now()+mins*6e4,brk,mins};try{localStorage.setItem("nira-focus",JSON.stringify(nira.focus))}catch(e){}nira.ot=nira.ot||document.title;nira.goal=brk?"":"focus";clearInterval(nira.fi);nira.fi=setInterval(focusTick,1000);focusTick();niraSay(brk?"Break time! Stretch and sip some water 💧":"Focus mode ON. I'll sit quietly while you study 📚",3200,true);sfx("ok")}
 function niraFocusStop(manual){const f=nira.focus;nira.focus=null;nira.goal="";clearInterval(nira.fi);try{localStorage.removeItem("nira-focus")}catch(e){}const b=$("#fbtn");if(b)b.textContent="⏱️";if(nira.ot){document.title=nira.ot;nira.ot=0}if(!$("#ncat"))return;
   if(manual){niraMode("walk",1);niraSay("Focus stopped. Back to playing! 🐾",2000,true)}else{sfx("bell");setTimeout(()=>sfx("meow"),800);niraMode("dance",4);niraSay(f&&f.brk?"Break over! Back to the books 📖":"Meow! Time's up! Great focus! 🎉",4000,true);niraNotes()}}
 
@@ -350,7 +365,7 @@ function niraBind(c){
   hit.addEventListener("pointermove",e=>{const d=nira.drag;if(!d)return;if(!d.mv&&Math.hypot(e.clientX-d.sx,e.clientY-d.sy)>7){d.mv=1;clearTimeout(d.ht);nira.plat=null;nira.atName=false;nira.target=false;niraMode("drag",9e9);niraSay(nLine("drag"),2200)}if(d.mv){nira.x=e.clientX-d.ox;nira.y=e.clientY-d.oy;niraPlace()}});
   const up=()=>{const d=nira.drag;if(!d)return;nira.drag=null;clearTimeout(d.ht);
     if(d.mv){nira.vx=0;nira.vy=0;nira.bounced=0;niraMode("air",0)}
-    else if(!d.hold){const n=Date.now();if(n-nira.lastUp<350&&nira.clicks.length<2){niraMode("spin",.8);niraSay("Wheee! 🌀",1500);sfx("pop");nira.clicks.push(n)}else niraPoke();nira.lastUp=n}};
+    else if(!d.hold){const n=Date.now();if(n-nira.lastUp<350&&nira.clicks.length<2){niraMode("spin",2.4);niraSay("Catching my tail! 🌀",2200);nira.clicks.push(n)}else niraPoke();nira.lastUp=n}};
   let rub=0,rubAt=0,px=0,petAt=0;
   hit.addEventListener("pointermove",e=>{if(nira.drag)return;const n=Date.now();if(n-rubAt>700)rub=0;else rub+=Math.abs(e.clientX-px);px=e.clientX;rubAt=n;
     if(rub>260&&n>petAt){rub=0;petAt=n+6000;niraMode("laugh",2);niraSay(nLine("pet"),2800);sfx("purr");niraNotes(["♥","♥","♥"])}});
@@ -365,10 +380,9 @@ function niraRest(on){
 function niraStep(dt,now){
   const c=$("#ncat"),W=c.offsetWidth,H=c.offsetHeight,FY=H*.94,vw=innerWidth,vh=innerHeight,floor=vh-4-FY,still=calmMotion.matches;
   if(nira.mode=="drag")return;
-  const flying=nira.mode=="air"||nira.mode=="flip";
+  const flying=nira.mode=="air";
   if(nira.focus&&!nira.focus.brk&&!state.catOff)nira.goal="focus";
-  if(!nira.goal&&!state.catOff&&now-nira.idleAt>45000&&!nira.focus&&!nira.qOpen&&!nira.toy&&now>nira.sayUntil){nira.goal="credit";if(!nira.atName&&!flying)niraBye()}
-  const wantName=state.catOff||nira.goal=="credit";
+    const wantName=state.catOff||nira.goal=="credit";
   if(!wantName)nira.leaveAt=0;
   if(nira.gone){ /* phone par: screen ke bahar, jab tak naam wala hissa na dikhe */
     const sp=wantName&&nSpot();
@@ -386,10 +400,10 @@ function niraStep(dt,now){
       return}
     if(sp)return niraNameStep(sp,dt,now);
     if(nira.atName)return niraLeave();
-    if(state.catOff){nira.plat=null;nira.y=floor;nira.x=Math.max(0,Math.min(vw-W,nira.x));if(nira.mode!="sit")niraMode("sit",9e9);return}}
+    if(state.catOff){nira.plat=null;nira.y=floor;nira.x=Math.max(0,Math.min(vw-W,nira.x));if(nira.mode!="sleep")niraMode("sleep",9e9);return}}
   if(still&&!state.catOff){ /* shant mode: na ghoomna, na kudna */
     nira.plat=null;nira.y=floor;nira.x=Math.max(0,Math.min(vw-W,nira.x));
-    const m=nira.focus&&!nira.focus.brk?"sleep":"sit";if(nira.mode!=m)niraMode(m,9e9);return}
+    const m="sit";if(nira.mode!=m)niraMode(m,9e9);return}
   if(flying){const pf=nira.y+FY;nira.vy+=1700*dt;nira.x+=nira.vx*dt;nira.y+=nira.vy*dt;const nf=nira.y+FY;
     nira.x=Math.max(-W*.2,Math.min(vw-W*.8,nira.x));
     if(nira.target){const sp=nSpot();if(!sp)nira.target=false;else{if(nira.vy>0&&nira.y>=sp.y){nira.target=false;nira.atName=true;nira.x=sp.x;nira.y=sp.y;nira.vx=nira.vy=0;niraMode("land",.35)}return}}
@@ -405,9 +419,10 @@ function niraStep(dt,now){
     nira.y=r.top-FY;L=r.left-W*.3;R=r.right-W*.7;if(R<L)R=L}else nira.y=floor;
   const drop=vx=>{nira.skip=nira.plat;nira.skipT=now+800;nira.plat=null;nira.vx=vx;nira.vy=0;nira.bounced=1;niraMode("air",0)};
   if(nira.goal=="focus"){
-    if(nira.mode=="sleep")return;if(nira.plat)return drop(40);
-    const tx=vw-W-12;if(Math.abs(nira.x-tx)<8){niraMode("sleep",9e9);niraSay("zzz... focus time. I'll guard your study! 😴",2600)}else{nira.dir=tx>nira.x?1:-1;niraMode("walk",9e9);nira.x+=nira.dir*60*dt}return}
-  const sp={w:60,run:175,chase:135}[nira.mode];
+    if(nira.mode=="sit"&&Math.abs(nira.x-(vw-W-12))<10&&!nira.plat)return;if(nira.plat)return drop(40);
+    const tx=vw-W-12;if(Math.abs(nira.x-tx)<8){niraMode("sit",9e9);niraSay("Focus time. I'll keep watch quietly 📚",2800)}else{nira.dir=tx>nira.x?1:-1;niraMode("walk",9e9);nira.x+=nira.dir*60*dt}return}
+  if(nira.mode=="spin"){const k=Math.cos(nira.age*5.2);nira.x=Math.max(L,Math.min(R,nira.x+k*95*dt));nira.dir=k>0?1:-1}
+  const sp={w:48,run:112,chase:92}[nira.mode];
   if(sp){
     if(nira.mode=="chase"){const tx=(nira.toy?nira.toy.x:nira.mx)-W/2;if(nira.toy){nira.dir=tx>nira.x?1:-1}else if(now-nira.mAt>4000)niraMode("walk",2);else if(Math.abs(tx-nira.x)<26){niraMode("laugh",1.6);niraSay("Got you! hehe 😹",1600);sfx("hehe")}else nira.dir=tx>nira.x?1:-1}
     nira.x+=nira.dir*sp*dt;
@@ -418,19 +433,19 @@ function niraLoop(ts){
   const c=$("#ncat");if(!c){nira.raf=0;return}
   nira.raf=requestAnimationFrame(niraLoop);
   const dt=Math.min(.05,(ts-(nira.last||ts))/1000),now=Date.now();nira.last=ts;
-  nira.age+=dt;nira.phase=(nira.phase+dt*(nira.mode=="run"?2.6:nira.mode=="chase"?1.9:1.15))%1;
+  nira.age+=dt;nira.phase=(nira.phase+dt*(nira.mode=="run"?1.8:nira.mode=="chase"?1.5:1))%1;
   if(!state.catOff&&ts-nira.plT>600){niraPlats();nira.plT=ts}
   niraStep(dt,now);niraToyStep(dt);
   const free=!state.catOff&&!nira.gone&&!nira.sink&&!nira.focus&&!nira.goal&&!document.hidden&&!$("#nintro")&&!nira.drag;
-  if(free&&$("#v-home").classList.contains("on")&&!nira.qOpen&&!nira.toy&&now>nira.toyAt&&nira.mode!="air"&&nira.mode!="flip"){nira.toyAt=now+rnd(120000,200000);niraToy(pick(["ball","fly"]))}
+  if(free&&$("#v-home").classList.contains("on")&&!nira.qOpen&&!nira.toy&&now>nira.toyAt&&nira.mode!="air"){nira.toyAt=now+rnd(120000,200000);niraToy(pick(["ball","fly"]))}
   if((nira.mode=="run"||nira.mode=="chase")&&ts>nira.pawAt){nira.pawAt=ts+190;niraPaw()}
   /* login hua to naam se swagat, na ho to kabhi kabhi yaad dilana */
   const who=typeof user!="undefined"&&user?user.id:null;
   if(who&&who!==nira.who){nira.who=who;if(!state.catOff){niraCheer("Oh, so you are {n}! 💛")}}else if(!who)nira.who=null;
-  if(free&&!nira.qOpen&&nira.asked<2&&now>nira.loginAt&&now>nira.sayUntil&&nira.mode!="air"&&nira.mode!="flip"){if(niraAskLogin()){nira.asked++;nira.loginAt=now+rnd(480000,600000)}else nira.loginAt=now+20000}
+  if(free&&!nira.qOpen&&nira.asked<2&&now>nira.loginAt&&now>nira.sayUntil&&nira.mode!="air"){if(niraAskLogin()){nira.asked++;nira.loginAt=now+rnd(480000,600000)}else nira.loginAt=now+20000}
   if(!state.catOff&&!nira.qOpen&&!document.hidden&&!$("#nintro")&&!nira.drag&&nira.mode!="air"){
     if(now>nira.quizAt&&now>nira.sayUntil&&!nira.focus)niraQuiz();
-    else if(now>nira.talkAt&&nira.mode!="sleep"){nira.talkAt=now+rnd(100000,170000);niraSay(Math.random()<.2?nTimeLine():pick(NF))}}
+    else if(now>nira.talkAt&&nira.mode!="sleep"){nira.talkAt=now+rnd(100000,170000);niraSay(Math.random()<.2?nTimeLine():fresh(NF))}}
   niraPlace();
   /* sone ya shant mode mein kam frames: battery bachti hai */
   if(ts-nira.drawT<(nira.mode=="sleep"||calmMotion.matches?90:0))return;nira.drawT=ts;
