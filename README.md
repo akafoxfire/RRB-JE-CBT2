@@ -13,7 +13,8 @@ A free, modern study website for the RRB JE CBT 2 (Electronics) exam. It breaks 
 - Mock test tracker with charts, accuracy, speed and subject-wise analysis
 - PDF download
 - Google login to sync progress and scores
-- Nira, an engineer cat who walks around the home page (can be switched off with the 🐱 button)
+- Nira, a playful engineer cat who roams the site, meows, quizzes you and naps during the Focus timer (switch her off with the 🐱 button)
+- Focus timer (25/50 min) and a 5 minute break timer
 - Dark and light theme
 
 ## 👨‍💻 Developer
